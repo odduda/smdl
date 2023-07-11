@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Data Graph{% endblock %}
+{% block body%}
+{% set ahtUrl = '/server/' + data.server_id|string + '/aht' %}
+{% set serverUrl = '/server/' + data.server_id|string %}
+<div class="wrapper">
+    <div class="notification" id="notification"></div>
+    <div class="server" id="server">
+        <div class="header">
+          <div class="box link" onClick="linkTo('{{serverUrl}}');">
+            <img src="{{ url_for('static', filename='img/home.png') }}" width="48px"/>
+          </div>
+          <div class="box">
+            <img src="{{ url_for('static', filename='img/sunrise.png') }}" width="48px"/>
+            <span id="sunrise">{{ data.sunrise }}</span>
+          </div>
+          <div class="box">
+            <img src="{{ url_for('static', filename='img/sunset.png') }}" width="48px"/>
+            <span id="sunset">{{ data.sunset }}</span>
+          </div>
+          <div class="box grow"></div>
+          <div class="box link" onClick="linkTo('{{ahtUrl}}');">
+            <img src="{{ url_for('static', filename='img/tmp.png') }}" width="48px"/>
+            <span class="tmphum" id="temperature">{{ data.temperature }}</span>
+          </div>
+          <div class="box link" onClick="linkTo('{{ahtUrl}}');">
+            <img src="{{ url_for('static', filename='img/hum.png') }}" width="48px"/>
+            <span class="tmphum" id="humidity">{{ data.humidity }}</span>
+          </div>
+        </div>
+    <div class="graph">
+        <div class="header">
+          <h2>{{data.title}}</h2>
+          <select id="graphPeriod">
+            <option value="7">7 Days</option>
+            <option value="14">14 Days</option>
+            <option value="30">30 Days</option>
+            <option value="60">60 Days</option>
+            <option value="90">90 Days</option>
+          </select>
+        </div>
+        <div id="graph"></div>
+    </div>
+</div>
+</div>
+{% endblock %}

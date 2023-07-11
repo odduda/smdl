@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}Server: {{data.name}}{% endblock %}
+{% block body%}
+    {% set ahtUrl = '/server/' + data.server_id|string + '/aht' %}
+    {% set showCalibrate = "hide" %}
+    {% set calibrateText = "Off" %}
+    {% if data.calibrate %}
+        {% set showCalibrate = "" %}
+        {% set calibrateText = "On" %}
+    {% endif %}
+
+    <div class="wrapper">
+      <div class="notification" id="notification"></div>
+      <div class="server" id="server">
+        <div class="header">
+          <div class="box link" onClick="linkTo('/');">
+            <img src="{{ url_for('static', filename='img/home.png') }}" width="48px"/>
+          </div>
+          <div class="box">
+            <img src="{{ url_for('static', filename='img/sunrise.png') }}" width="48px"/>
+            <span id="sunrise">{{ data.sunrise }}</span>
+          </div>
+          <div class="box">
+            <img src="{{ url_for('static', filename='img/sunset.png') }}" width="48px"/>
+            <span id="sunset">{{ data.sunset }}</span>
+          </div>
+          <div class="box grow"></div>
+          <div class="box">
+            <div class="calibrate" id="calibrate">Calibrate:</div>
+            <div class="calibrate-status {{calibrateText}}" id="calibrateStatus">{{ calibrateText }}</div>
+          </div>
+          <div class="box link" onClick="linkTo('{{ahtUrl}}');">
+            <img src="{{ url_for('static', filename='img/tmp.png') }}" width="48px"/>
+            <span class="tmphum" id="temperature">{{ data.temperature }}</span>
+          </div>
+          <div class="box link" onClick="linkTo('{{ahtUrl}}');">
+            <img src="{{ url_for('static', filename='img/hum.png') }}" width="48px"/>
+            <span class="tmphum" id="humidity">{{ data.humidity }}</span>
+          </div>
+        </div>
+
+        {% for address, channels in data.csms.items() %}
+        <div class="sensors">
+        <div class="header"><h1>{{address}}</h1></div>
+        <div class="sensors-wrapper" id="address-x49">
+        {% for channel, csms in channels.items() %}
+        <div class="item">
+        <div class="channel">
+            <h2>{{ channel }}</h2>
+        </div>
+        {% set jsid = address+'-'+channel %}
+        {% set csmsUrl = '/server/' + data.server_id|string + '/csms/' + address+':'+channel %}
+        <div class="value" onclick="linkTo('{{csmsUrl}}')">
+            {% set value = csms.value|int %}
+            {% if value > 999 %}
+                {% set value = 999 %}
+            {% endif %}
+            {% set valueCSS = "style=height:" + value|string + "%" %}
+            <span id="{{jsid}}-value">{{'%0.0f' % value|float}}</span>
+            <h3>%</h3>
+            <div class="background" id="{{jsid}}-valueCSS" {{valueCSS}}>
+              <div class="wave"></div>
+            </div>
+        </div>
+        <div class="updated" id="{{jsid}}-lastUpdated">
+          {{ csms.last_updated }}
+        </div>
+        <div class="calibrate-wrapper {{showCalibrate}}" id="{{jsid}}-showCalibrate">
+            <div class="box">
+              <div class="calibration-header">Last calibration date</div>
+            </div>
+            <div class="box">
+            <div id="{{jsid}}-calibrationDate">{{ csms.calibration_date }}</div>
+            </div>
+            <div class="value">
+            <h1 id="{{jsid}}-rawValue">{{ csms.raw_value }}</h1>
+            </div>
+            <div class="box">
+            <div><input type="text" autocomplete=off readonly="" id="{{jsid}}-input-min" value="{{csms.min}}"></div>
+            <div><input type="text" autocomplete=off readonly="" id="{{jsid}}-input-max" value="{{csms.max}}"></div>
+            </div>
+            <div class="box">
+            <div><button id="{{jsid}}" onclick="SERVER.setInputValue(this.id, 'min')">Min</button></div>
+            <div><button id="{{jsid}}" onclick="SERVER.setInputValue(this.id, 'max')">Max</button></div>
+            </div>
+            <div class="box">
+            <div><button id="{{jsid}}" onclick="SERVER.updateCalibrationValue(this.id)">Update</button></div>
+            </div>
+        </div>
+        </div>
+        {% endfor %}
+        </div>
+        </div>
+        {% endfor %}
+        <div class="settings">
+          <div class="log">
+            <table>
+              <tr>
+                <th colspan="2">Logs</th>
+              </tr>
+              {% for log in data.logs %}
+              <tr>
+                <td>{{log.msg}}</td>
+                <td>{{log.created}}</td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+          <div class="add-server">
+            <div class="add-server-header">
+              <h2>Settings</h2>
+            </div>
+            <form id="update-server">
+              <div class="add-server-box">
+                <span><label for="latitude">Latitude</label></span>
+                <input
+                  type="text"
+                  name="latitude"
+                  id="latitude"
+                  value="{{data.lat}}"
+                  placeholder="0.00000"
+                />
+              </div>
+              <div class="add-server-box">
+                <span><label for="longitude">Longitude</label></span>
+                <input
+                  type="text"
+                  name="longitude"
+                  id="longitude"
+                  value="{{data.lng}}"
+                  placeholder="0.00000"
+                />
+              </div>
+              <div class="add-server-box">
+                <span><label for="dayInterval">Day Interval</label></span>
+                <input
+                  type="text"
+                  name="dayInterval"
+                  id="dayInterval"
+                  value="{{data.day_interval}}"
+                  placeholder="30 seconds"
+                />
+              </div>
+              <div class="add-server-box">
+                <span><label for="nightInterval">Night Interval</label></span>
+                <input
+                  type="text"
+                  name="nightInterval"
+                  id="nightInterval"
+                  value="{{data.night_interval}}"
+                  placeholder="120 seconds"
+                />
+              </div>
+              <div class="add-server-box submit">
+                <div class="submit-button" id="updateServerSubmit">
+                  <p>Update</p>
+                </div>
+              </div>
+            </form>
+          </div>
+
+
+        </div>
+        <div class="settings">
+          <button id="delete" data-confirm="0">Delete</button>
+        </div>
+      </div>
+    </div>
+{% endblock %}

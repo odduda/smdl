@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Plant moisture data logger using Raspberry Pico W{% endblock %}
+{% block body %}
+    <div class="wrapper">
+      <div id="ca-wrapper" class="ca-wrapper">
+        <canvas id="ca"></canvas>
+      </div>
+      <div class="notification" id="notification"></div>
+      <div class="content">
+        <div class="servers">
+          <div class="header">
+            <div class="name" id="name"></div>
+            <div class="aht"><span id="temperature">- - . -</span>℃</div>
+            <div class="aht"><span id="humidity">- -</span>%</div>
+          </div>
+          <div class="pagination">
+            <div><button id="prev">Prev</button></div>
+            <div class="nums"><span id="current">-</span> / <span id="max">-</span></div>
+            <div><button id="next">Next</button></div>
+            <div><input type="text" name="goto" id="gotoInput" onClick="this.select();" class="goto"/><button id="goto">Jump to</button></div>
+            <div class="open" id="open">Open</div>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="add-server">
+          <div class="add-server-header">
+            <h2>Add server</h2>
+          </div>
+          <form id="add-server">
+            <div class="add-server-box">
+              <span><label for="id">Name id</label></span>
+              <input type="text" name="name" id="id" placeholder="Garden" />
+            </div>
+            <div class="add-server-box">
+              <span><label for="latitude">Latitude</label></span>
+              <input
+                type="text"
+                name="latitude"
+                id="latitude"
+                placeholder="0.00000"
+              />
+            </div>
+            <div class="add-server-box">
+              <span><label for="longitude">Longitude</label></span>
+              <input
+                type="text"
+                name="longitude"
+                id="longitude"
+                placeholder="0.00000"
+              />
+            </div>
+            <div class="add-server-box">
+              <span><label for="dayInterval">Day Interval</label></span>
+              <input
+                type="text"
+                name="dayInterval"
+                id="dayInterval"
+                placeholder="5 minutes"
+              />
+            </div>
+            <div class="add-server-box">
+              <span><label for="nightInterval">Night Interval</label></span>
+              <input
+                type="text"
+                name="nightInterval"
+                id="nightInterval"
+                placeholder="15 minutes"
+              />
+            </div>
+            <div class="add-server-box submit">
+              <div class="submit-button" id="addServerSubmit">
+                <p>Submit</p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endblock %}

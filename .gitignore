@@ -1,0 +1,5 @@
+*.db3
+*.db
+*.txt
+Pipfile
+Pipfile.lock
