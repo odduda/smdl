@@ -80,3 +80,6 @@ If you want to use WSGI server you can follow the steps here -> [Flask docs](htt
 ![Alt text](./http/static/img/server.png?raw=true "Server Dashboard")
 
 ![Alt text](./http/static/img/index.png?raw=true "Index Page")
+=======
+
+>>>>>>> 8875bdf43b5b4adcabd4431787ae2c1207c642fc
