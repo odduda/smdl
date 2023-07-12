@@ -23,7 +23,7 @@ settings = {
     "port": 5000,
     "ads": ADS1115,
     "aht": AHT2x,
-    "wifi": ["Pamidore G", "maloPrase25"], # WIFI ssid and password
+    "wifi": ["ssid", "password"], # Wifi credentials
     "wifi_turn_off": True, # Turn off wifi after reading sensors
     "devices": { # { I2C Address: [...channels] }
         0x48: [0, 1, 2],
